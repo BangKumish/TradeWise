@@ -22,9 +22,9 @@
 
 # Dagger - Hilt
 -keep class dagger.hilt.internal.aggregatedroot.codegen.*
--keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager.FragmentContextWrapper
+-keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper
 -keep class *_*HiltModules* { *; }
--keep class *..HiltWrapper_* { *; }
+-keep class **.HiltWrapper_* { *; }
 
 # Retrofit & OkHttp
 -dontwarn retrofit2.**
