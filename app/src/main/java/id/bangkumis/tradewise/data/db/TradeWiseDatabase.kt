@@ -19,7 +19,7 @@ import id.bangkumis.tradewise.data.db.entity.TransactionEntity
         MarketCoinEntity::class,
         CoinDetailEntity::class
                ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class TradeWiseDatabase: RoomDatabase() {

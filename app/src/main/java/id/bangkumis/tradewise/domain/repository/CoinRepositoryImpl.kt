@@ -2,8 +2,8 @@ package id.bangkumis.tradewise.domain.repository
 
 import id.bangkumis.tradewise.data.db.dao.CoinDetailDao
 import id.bangkumis.tradewise.data.db.dao.MarketCoinDao
-import id.bangkumis.tradewise.data.model.CoinDetailDto
 import id.bangkumis.tradewise.data.model.CoinMarketDto
+import id.bangkumis.tradewise.data.model.MarketChartDto
 import id.bangkumis.tradewise.data.remote.ApiService
 import id.bangkumis.tradewise.data.toDomain
 import id.bangkumis.tradewise.data.toDto
@@ -38,7 +38,11 @@ class CoinRepositoryImpl @Inject constructor(
         } catch (e: HttpException) {
             emit(Resource.Error("An unexpected error occurred: ${e.localizedMessage}"))
         } catch (e: IOException) {
-            emit(Resource.Error("Couldn't reach server. Check your internet connection."))
+            emit(Resource.Error(
+                "Couldn't reach server. Check your internet connection." +
+                    "Detail: ${e.localizedMessage}"
+                )
+            )
         }
 
         val updatedCoins = marketCoinDao.getMarketCoins().first().map { it.toDto() }
@@ -66,7 +70,11 @@ class CoinRepositoryImpl @Inject constructor(
             }
         } catch (e: IOException) {
             if (cachedDetail == null) {
-                emit(Resource.Error("Couldn't reach server. Check your internet connection."))
+                emit(Resource.Error(
+                    "Couldn't reach server. Check your internet connection." +
+                            "Detail: ${e.localizedMessage}"
+                    )
+                )
             }
         }
     }
@@ -79,7 +87,19 @@ class CoinRepositoryImpl @Inject constructor(
             true
         } catch (e: HttpException) {
             false
+        }
+    }
 
+    override fun getCoinMarketChart(
+        coinID: String,
+        days: String
+    ): Flow<Resource<MarketChartDto>> = flow {
+        emit(Resource.Loading())
+        try {
+            val chartData = apiService.getMarketChart(coinID, days)
+            emit(Resource.Success(chartData))
+        } catch (e: HttpException) {
+            emit(Resource.Error("An unexpected error occurred: ${e.localizedMessage}"))
         }
     }
 }

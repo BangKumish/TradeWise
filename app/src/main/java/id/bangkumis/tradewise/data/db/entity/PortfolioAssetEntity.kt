@@ -11,4 +11,5 @@ data class PortfolioAssetEntity(
     val name: String,
     val amount: Double,
     val averagePrice: Double,
+    val imageUrl: String,
 )

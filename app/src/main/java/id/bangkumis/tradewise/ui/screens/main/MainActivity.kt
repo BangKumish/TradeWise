@@ -1,4 +1,4 @@
-package id.bangkumis.tradewise.ui.main
+package id.bangkumis.tradewise.ui.screens.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,9 +26,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
-import id.bangkumis.tradewise.ui.Screen
-import id.bangkumis.tradewise.ui.detail.CoinDetailScreen
-import id.bangkumis.tradewise.ui.portfolio.PortfolioScreen
+import id.bangkumis.tradewise.ui.screens.Screen
+import id.bangkumis.tradewise.ui.screens.detail.CoinDetailScreen
+import id.bangkumis.tradewise.ui.screens.portfolio.PortfolioScreen
 import id.bangkumis.tradewise.ui.theme.TradeWiseTheme
 
 

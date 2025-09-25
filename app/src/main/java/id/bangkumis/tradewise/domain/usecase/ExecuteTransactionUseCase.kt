@@ -16,7 +16,8 @@ class ExecuteTransactionUseCase @Inject constructor(
         name: String,
         transactionType: String,
         quantityString: String,
-        pricePerAsset: Double
+        pricePerAsset: Double,
+        imageUrl: String,
     ) {
         val quantity = quantityString.toDoubleOrNull() ?: return
         val currentAsset = portfolioDao.getAssetByID(assetID)
@@ -31,7 +32,8 @@ class ExecuteTransactionUseCase @Inject constructor(
                 symbol = symbol,
                 name = name,
                 amount = newQuantity,
-                averagePrice = newAveragePrice
+                averagePrice = newAveragePrice,
+                imageUrl = imageUrl
             )
             portfolioDao.upsertAsset(updatedAsset)
         } else {

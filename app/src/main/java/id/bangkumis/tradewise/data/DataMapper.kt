@@ -4,10 +4,6 @@ import id.bangkumis.tradewise.data.db.entity.CoinDetailEntity
 import id.bangkumis.tradewise.data.db.entity.MarketCoinEntity
 import id.bangkumis.tradewise.data.model.CoinDetailDto
 import id.bangkumis.tradewise.data.model.CoinMarketDto
-import id.bangkumis.tradewise.data.model.CurrencyDto
-import id.bangkumis.tradewise.data.model.DescriptionDto
-import id.bangkumis.tradewise.data.model.ImageDto
-import id.bangkumis.tradewise.data.model.MarketDataDto
 import id.bangkumis.tradewise.domain.model.CoinDetail
 
 fun CoinMarketDto.toEntity(): MarketCoinEntity{

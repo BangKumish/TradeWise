@@ -1,4 +1,4 @@
-package id.bangkumis.tradewise.ui.detail
+package id.bangkumis.tradewise.ui.screens.detail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardOptions

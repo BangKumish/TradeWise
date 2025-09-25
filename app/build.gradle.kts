@@ -69,6 +69,19 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //Bytebeats Chart
+    //noinspection UseTomlInstead
+    implementation("io.github.bytebeats:compose-charts:0.2.1")
+
+    // Compose
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.compose)
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
     // Dagger - Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
@@ -86,14 +99,13 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
-    // Coroutines
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.android)
-
-    // Compose
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.coil.compose)
+    //VICO
+    //noinspection UseTomlInstead
+    implementation("com.patrykandpatrick.vico:core:2.1.3")
+    //noinspection UseTomlInstead
+    implementation("com.patrykandpatrick.vico:compose:2.1.3")
+    //noinspection UseTomlInstead
+    implementation("com.patrykandpatrick.vico:compose-m3:2.1.3")
 
     // WorkManager
     implementation(libs.androidx.work.runtime)
