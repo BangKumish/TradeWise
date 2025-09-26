@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -26,7 +27,10 @@ fun ChartIntervalButtonGroup(
     val selectedColor = remember { mutableStateOf(0) }
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(14.dp)
+        horizontalArrangement = Arrangement.spacedBy(
+            14.dp,
+            Alignment.CenterHorizontally
+        )
     ){
         TimeIntervals.entries.forEachIndexed { index, intervals ->
             val backgroundColor = if (selectedColor.value == index) {

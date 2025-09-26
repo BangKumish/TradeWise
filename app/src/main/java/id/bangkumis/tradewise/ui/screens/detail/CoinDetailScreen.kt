@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -26,11 +27,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,11 +36,11 @@ import coil.compose.AsyncImage
 import id.bangkumis.tradewise.ui.components.chartinterval.ChartIntervalButtonGroup
 import id.bangkumis.tradewise.ui.components.chartinterval.TimeIntervals
 import id.bangkumis.tradewise.ui.components.linechart.CoinPriceChart
-import id.bangkumis.tradewise.ui.components.linechart.CoinPriceLineDrawer
+import id.bangkumis.tradewise.ui.components.linechart.CoinPriceLabelDrawer
+import id.bangkumis.tradewise.ui.theme.LossRed
 import id.bangkumis.tradewise.ui.theme.ProfitGreen
 import me.bytebeats.views.charts.line.render.line.GradientLineShader
 import me.bytebeats.views.charts.line.render.line.SolidLineDrawer
-import me.bytebeats.views.charts.line.render.line.SolidLineShader
 import me.bytebeats.views.charts.line.render.point.EmptyPointDrawer
 import me.bytebeats.views.charts.simpleChartAnimation
 
@@ -52,7 +50,6 @@ fun CoinDetailScreen(
 ) {
     val state = viewModel.state.collectAsState().value
     val snackBarHostState = remember { SnackbarHostState() }
-    val profitGreen = Color(0xFF22C55E)
 
     LaunchedEffect(key1 = true){
         viewModel.eventFlow.collect{ event ->
@@ -105,14 +102,19 @@ fun CoinDetailContent(
     onIntervalSelected: (TimeIntervals) -> Unit
 ){
     val coin = state.coin!!
+    val chartColor = if(state.isPriceUp){
+        ProfitGreen
+    } else {
+        MaterialTheme.colorScheme.error
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(Modifier.height(16.dp))
         AsyncImage(
             model = coin.imageUrl,
             contentDescription = coin.name,
@@ -130,9 +132,6 @@ fun CoinDetailContent(
             fontWeight = FontWeight.Bold
             )
 
-        // TO BE ADD
-        // Simple PriceChange composable for this
-        // Text(text = "${coin.priceChangePercentage24h}%", color = if (coin.priceChangePercentage24h >= 0) Color.Green else Color.Red)
         Spacer(Modifier.height(24.dp))
         state.lineChartData?.let{ chartData ->
             CoinPriceChart(
@@ -144,17 +143,17 @@ fun CoinDetailContent(
                 pointDrawer = EmptyPointDrawer,
                 lineDrawer = SolidLineDrawer(
                     thickness = 2.dp,
-                    color = ProfitGreen
+                    color = chartColor
                 ),
                 lineShader = GradientLineShader(
                     colors = listOf(
-                        ProfitGreen.copy(alpha = .4f),
-                        ProfitGreen.copy(alpha = 0f)
+                        chartColor.copy(alpha = .4f),
+                        chartColor.copy(alpha = 0f)
                     )
                 ),
-                labelDrawer = CoinPriceLineDrawer(
-                    labelTextColorLowest = MaterialTheme.colorScheme.error.copy(alpha = .4f),
-                    labelTextColorHighest = ProfitGreen.copy(alpha = .4f),
+                labelDrawer = CoinPriceLabelDrawer(
+                    labelTextColorLowest = LossRed,
+                    labelTextColorHighest = ProfitGreen,
                 ),
                 horizontalOffset = 0f
             )
@@ -191,19 +190,41 @@ fun CoinDetailContent(
         ) {
             Button(
                 onClick = onBuyClick,
-                Modifier.weight(1f),
+                Modifier
+                    .weight(1f)
+                    .height(50.dp),
+                shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
                     MaterialTheme.colorScheme.primary.copy(.4f)
+                ),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+            ) { Text(
+                "BUY",
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 1.sp
+                    )
                 )
-            ) { Text("BUY")}
+            }
             if (state.ownedAmount > 0.00000001){
                 Button(
                     onClick = onSellClick,
-                    Modifier.weight(1f),
+                    Modifier
+                        .weight(1f)
+                        .height(50.dp),
+                    shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         MaterialTheme.colorScheme.error.copy(.4f)
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                ) { Text(
+                    "SELL",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = 1.sp
+                        )
                     )
-                ) { Text("SELL")}
+                }
             }
         }
     }

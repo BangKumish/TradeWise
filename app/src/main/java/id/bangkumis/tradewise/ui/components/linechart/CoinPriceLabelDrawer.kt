@@ -12,7 +12,7 @@ import me.bytebeats.views.charts.toLegacyInt
 
 private const val Y_OFFSET = 20F
 
-data class CoinPriceLineDrawer (
+data class CoinPriceLabelDrawer (
     val labelTextSize: TextUnit = 12.sp,
     val labelTextColorLowest: Color = Color.White,
     val labelTextColorHighest: Color = Color.Black,
@@ -53,17 +53,15 @@ data class CoinPriceLineDrawer (
         val labelValue = axisLabelFormatter(label)
         val bounds = android.graphics.Rect()
         textPaint.getTextBounds(labelValue, 0, labelValue.length, bounds)
-        val xCenter = when {
-            pointLocation.x <= 0f -> { // First point on the chart
-                bounds.width().toFloat() / 2
-            }
-            pointLocation.x >= canvas.nativeCanvas.width -> { // Last point on the chart
-                canvas.nativeCanvas.width - bounds.width().toFloat() / 2
-            }
-            else -> {
-                pointLocation.x
-            }
-        }
+
+        val labelWidth = bounds.width().toFloat()
+        val halfLabelWidth = labelWidth / 2f
+        val canvasWidth = canvas.nativeCanvas.width.toFloat()
+
+        val xCenter = pointLocation.x.coerceIn(
+            minimumValue = halfLabelWidth,
+            maximumValue = canvasWidth - halfLabelWidth
+        )
         val yCenter = if (isHighestPrice) {
             pointLocation.y - labelTextHeight(drawScope) / 2
         } else {

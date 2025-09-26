@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.bytebeats.views.charts.line.LineChartData
+import me.bytebeats.views.charts.line.render.point.EmptyPointDrawer
 import javax.inject.Inject
 
 data class CoinDetailState(
@@ -27,6 +28,7 @@ data class CoinDetailState(
     val error: String = "",
     val isShowingDialog: Boolean = false,
     val transactionType: String = "BUY",
+    val isPriceUp: Boolean = true,
     val lineChartData: LineChartData? = null,
     val selectedInterval: TimeIntervals = TimeIntervals.ONE_DAY
 )
@@ -60,7 +62,9 @@ class CoinDetailViewModel @Inject constructor(
         coinRepository.getCoinMarketChart(coinID, interval.toDays()).onEach { result ->
             if (result is Resource.Success) {
                 val points = result.data?.prices?.map { priceEntry ->
-                    LineChartData.Point(value = priceEntry[1].toFloat(), label = "")
+                    val price = priceEntry[1].toFloat()
+                    val priceLabel = "$${"%.2f".format(price)}"
+                    LineChartData.Point(value = price, label = priceLabel)
                 }?: emptyList()
 
                 _state.value = _state.value.copy(
@@ -86,7 +90,8 @@ class CoinDetailViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         coin = result.data,
-                        isLoading = false
+                        isLoading = false,
+                        isPriceUp = (result.data?.priceChangePercentage24h ?: 0.0) >= 0
                     )
                 }
                 is Resource.Error -> {

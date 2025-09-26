@@ -31,7 +31,7 @@ fun CoinPriceChart(
     pointDrawer: IPointDrawer = FilledCircularPointDrawer(),
     lineDrawer: ILineDrawer = SolidLineDrawer(),
     lineShader: ILineShader = EmptyLineShader,
-    labelDrawer: ILabelDrawer = CoinPriceLineDrawer(),
+    labelDrawer: ILabelDrawer = CoinPriceLabelDrawer(),
     horizontalOffset: Float = 5F,
 ){
     check(horizontalOffset in 0f..25F){
