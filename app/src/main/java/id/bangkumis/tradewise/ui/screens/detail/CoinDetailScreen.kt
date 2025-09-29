@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -33,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import id.bangkumis.tradewise.ui.components.loading.SequentialDotLoader
 import id.bangkumis.tradewise.ui.components.chartinterval.ChartIntervalButtonGroup
 import id.bangkumis.tradewise.ui.components.chartinterval.TimeIntervals
 import id.bangkumis.tradewise.ui.components.linechart.CoinPriceChart
@@ -60,7 +60,10 @@ fun CoinDetailScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) }
     ) { innerPadding ->
-        Box(Modifier.fillMaxSize().padding(innerPadding)){
+        Box(Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+        ){
             if(state.coin != null){
                 CoinDetailContent(
                     state = state,
@@ -72,12 +75,8 @@ fun CoinDetailScreen(
                 )
             }
             if(state.isLoading){
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .align(Alignment.Center),
-                    color = MaterialTheme.colorScheme.secondary,
-                    trackColor = MaterialTheme.colorScheme.surfaceVariant
+                SequentialDotLoader(
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
             if (state.error.isNotBlank()){
@@ -105,7 +104,7 @@ fun CoinDetailContent(
     val chartColor = if(state.isPriceUp){
         ProfitGreen
     } else {
-        MaterialTheme.colorScheme.error
+        LossRed
     }
 
     Column(
@@ -195,7 +194,7 @@ fun CoinDetailContent(
                     .height(50.dp),
                 shape = RoundedCornerShape(8.dp),
                 colors = ButtonDefaults.buttonColors(
-                    MaterialTheme.colorScheme.primary.copy(.4f)
+                    MaterialTheme.colorScheme.primary
                 ),
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
             ) { Text(
@@ -214,7 +213,7 @@ fun CoinDetailContent(
                         .height(50.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        MaterialTheme.colorScheme.error.copy(.4f)
+                        LossRed
                     ),
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
                 ) { Text(

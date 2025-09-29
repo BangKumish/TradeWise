@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.bangkumis.tradewise.data.model.CoinMarketDto
 import id.bangkumis.tradewise.domain.model.PortfolioAsset
+import id.bangkumis.tradewise.domain.model.PortfolioSummary
 import id.bangkumis.tradewise.domain.repository.CoinRepository
 import id.bangkumis.tradewise.domain.usecase.GetPortfolioUseCase
 import id.bangkumis.tradewise.util.Resource
@@ -19,7 +20,9 @@ data class DashboardState(
     val isLoading: Boolean = false,
     val coins: List<CoinMarketDto> = emptyList(),
     val portfolioAssets: List<PortfolioAsset> = emptyList(),
-    val error: String = ""
+    val portfolioSummary: PortfolioSummary = PortfolioSummary(),
+    val error: String = "",
+    val topPortfolioAsset: List<PortfolioAsset> = emptyList()
 )
 
 @HiltViewModel
@@ -49,12 +52,29 @@ class MainViewModel @Inject constructor(
                 )
             }
 
+            val totalValue = portfolioAssets.sumOf { it.totalValue }
+            val totalCost = portfolioAssets.sumOf { it.totalCost }
+            val totalProfitLoss = totalValue - totalCost
+            val profitLossPercentage = if (totalCost > 0.0) (totalProfitLoss / totalCost) * 100 else 0.0
+
+            val summary = PortfolioSummary(
+                totalValue = totalValue,
+                totalProfitLoss = totalProfitLoss,
+                profitLossPercentage
+            )
+
+            val sortedAndLimitedPortfolio = portfolioAssets
+                .sortedByDescending { it.totalValue }
+                .take(10)
+
             when(marketResult){
                 is Resource.Success -> {
                     _state.value = DashboardState(
                         isLoading = false,
                         coins = marketResult.data ?: emptyList(),
-                        portfolioAssets = portfolioAssets
+                        portfolioAssets = portfolioAssets,
+                        portfolioSummary = summary,
+                        topPortfolioAsset = sortedAndLimitedPortfolio
                     )
                 }
                 is Resource.Error -> {
