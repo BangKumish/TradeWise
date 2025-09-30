@@ -1,4 +1,4 @@
-package id.bangkumis.tradewise.ui.components
+package id.bangkumis.tradewise.ui.components.dashboard
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

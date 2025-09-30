@@ -1,4 +1,4 @@
-package id.bangkumis.tradewise.ui.components
+package id.bangkumis.tradewise.ui.components.dashboard
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween

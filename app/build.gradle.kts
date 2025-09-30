@@ -90,6 +90,12 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.hilt.work)
 
+    //Palette
+    //noinspection UseTomlInstead
+    implementation("androidx.palette:palette:1.0.0")
+    //noinspection UseTomlInstead
+    implementation("androidx.palette:palette-ktx:1.0.0")
+
     // Retrofit & OkHttp
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

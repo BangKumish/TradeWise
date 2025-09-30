@@ -1,9 +1,7 @@
 package id.bangkumis.tradewise.ui.screens.portfolio
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +15,6 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -32,12 +28,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import id.bangkumis.tradewise.ui.screens.Screen
-import id.bangkumis.tradewise.ui.components.PortfolioListItem
+import id.bangkumis.tradewise.ui.components.dashboard.PortfolioListItem
+import id.bangkumis.tradewise.ui.components.portfolio.PortfolioSummaryCard
 
 @Composable
 fun PortfolioScreen(
@@ -70,29 +66,10 @@ fun PortfolioContent(
             .padding(16.dp),
     ) {
         item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                elevation = CardDefaults.cardElevation(4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Text(text = "Total Portfolio Value", style = MaterialTheme.typography.titleMedium)
-                    Text(
-                        text = "$${"%.2f". format(state.summary.totalValue)}",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    val profitColor = if (state.summary.totalProfitLoss >= 0) Color(0xFF4CAF50) else Color.Red
-                    Text(
-                        text = "${if (state.summary.totalProfitLoss >= 0) "+" else ""}${"%.2f".format(state.summary.totalProfitLoss)} (${"%.2f".format(state.summary.totalProfitLossPercentage)}%) Today",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = profitColor
-                    )
-                }
-            }
+            PortfolioSummaryCard(
+                summary = state.summary,
+                portfolioAsset = state.assets
+            )
             Spacer(modifier = Modifier.height(24.dp))
         }
 

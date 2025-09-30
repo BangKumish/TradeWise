@@ -32,9 +32,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import id.bangkumis.tradewise.data.model.CoinMarketDto
 import id.bangkumis.tradewise.ui.screens.Screen
-import id.bangkumis.tradewise.ui.components.CoinListItem
-import id.bangkumis.tradewise.ui.components.NetWorthCard
-import id.bangkumis.tradewise.ui.components.PortfolioCarouselItem
+import id.bangkumis.tradewise.ui.components.dashboard.CoinListItem
+import id.bangkumis.tradewise.ui.components.dashboard.NetWorthCard
+import id.bangkumis.tradewise.ui.components.dashboard.PortfolioCarouselItem
 import id.bangkumis.tradewise.ui.components.loading.ShimmerListItem
 
 @Composable
